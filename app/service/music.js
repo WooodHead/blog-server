@@ -1,0 +1,38 @@
+module.exports = app => {
+  class User extends app.Service {
+    async create(target) {
+      const music = new this.ctx.model.music(Object.assign({
+        createDate: this.ctx.helper.currentTime(),
+      }, target))
+      const result = await music.save();
+      return result;
+    }
+    async find(id) {
+      const music = await this.ctx.model.music.findOne({_id: id});
+      return music;
+    }
+    async remove(id) {
+      const doc = await this.ctx.model.music.remove({_id: id});
+      if (doc.result.ok) {
+        if (doc.result.n) return true;
+        throw new Error('该音乐不存在');
+      }
+    }
+    async update(target) {
+      const music = await this.ctx.model.music.findById({_id: target._id});
+      if (music) {
+        for (let key in target) {
+          music[key] = target[key];
+        }
+        const doc = await music.save();
+        return doc;
+      }
+      return undefined;
+    }
+    async search(query) {
+      const result = await this.ctx.helper.search(query, this.ctx.model.music, 'publisher');
+      return result;
+    }
+  }
+  return User;
+};
