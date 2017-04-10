@@ -4,6 +4,7 @@ node_modules/
 coverage/
 .idea/
 run/
+app/public/movies
 .DS_Store
 *.swp
 
