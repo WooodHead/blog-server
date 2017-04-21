@@ -5,9 +5,8 @@ const createRule = {
 	email: { type: 'string', required: false },
 	name: 'string',
 	birthday: { type: 'string', required: false },
-	department: 'string',
 	title: { type: 'string', required: false },
-	avatar_url: { type: 'string', required: false },
+	photo: { type: 'string', required: false },
 	is_admin: { type: 'boolean', required: false },
 }
 
@@ -25,7 +24,7 @@ module.exports = app => {
 		async show() {
 			const { ctx, service } = this;
 			const { id } = ctx.params;
-			const user = await service.user.find(id);
+			const user = await service.user.find({_id: id});
 			ctx.body = {
 				user
 			};
@@ -72,9 +71,7 @@ module.exports = app => {
 				uploadDir: './public/images/photo/',
 			});
 			const avatar_url = url.split('./public')[1];
-			console.log(url, '123')
 			const id = await service.update({_id: ctx.params.id, avatar_url})
-			console.log(id);
 			ctx.body = {
 				id
 			};

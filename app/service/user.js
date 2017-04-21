@@ -3,14 +3,12 @@ module.exports = app => {
     async create(target) {
       const user = new this.ctx.model.user(Object.assign({
         created_at: this.ctx.helper.currentTime(),
-        is_admin: false,
-        avatar_url: '/images/chh1.jpg',
       }, target))
       const result = await user.save();
       return result;
     }
-    async find(id) {
-      const user = await this.ctx.model.user.findOne({_id: id});
+    async find(params) {
+      const user = await this.ctx.model.user.findOne(params);
       return user;
     }
     async findAll() {

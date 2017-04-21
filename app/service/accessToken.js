@@ -4,12 +4,12 @@ const jwt = require('jsonwebtoken');
 
 module.exports = app => {
 	class AccessToken extends app.Service {
-		async create(token, expiration, userId, clientId, scope) {
+		async create(token, expiration, user_id, client_id, scope) {
 			const id = jwt.decode(token).jti;
 			accessToken = new this.ctx.model.accessToken({
 				value: id,
-				userId,
-				clientId,
+				user_id,
+				client_id,
 				scope,
 				expiration,
 			})

@@ -2,7 +2,7 @@ module.exports = mongoose => {
 	const Schema = mongoose.Schema;
   const MusicSchema = new Schema({
     name: { type: String, required: true },
-    createDate: { type: String, required: true },
+    created_at: { type: String, required: true },
     image: { type: String, required: false },
     singer: { type: String, required: false },
     composer: { type: String, required: false },

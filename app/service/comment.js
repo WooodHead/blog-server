@@ -1,8 +1,8 @@
 module.exports = app => {
-  class User extends app.Service {
+  class Comment extends app.Service {
     async create(target) {
       const comment = new this.ctx.model.comment(Object.assign({
-        createDate: this.ctx.helper.currentTime(),
+        created_at: this.ctx.helper.currentTime(),
       }, target))
       const result = await comment.save();
       return result;
@@ -12,5 +12,5 @@ module.exports = app => {
       return result;
     }
   }
-  return User;
+  return Comment;
 };

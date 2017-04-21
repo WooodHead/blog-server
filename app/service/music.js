@@ -1,8 +1,8 @@
 module.exports = app => {
-  class User extends app.Service {
+  class Music extends app.Service {
     async create(target) {
       const music = new this.ctx.model.music(Object.assign({
-        createDate: this.ctx.helper.currentTime(),
+        created_at: this.ctx.helper.currentTime(),
       }, target))
       const result = await music.save();
       return result;
@@ -34,5 +34,5 @@ module.exports = app => {
       return result;
     }
   }
-  return User;
+  return Music;
 };

@@ -9,10 +9,7 @@ module.exports = mongoose => {
     email: { type: String, required: false },
     name: { type: String, required: true },
     birthday: { type: String, required: false },
-    department: { type: String, required: true },
-    title: { type: String, required: false },
-    avatar_url: { type: String, required: false },
-    is_admin: { type: Boolean, required: true },
+    photo: { type: String, required: false },
     created_at: { type: String, required: true },
   });
 

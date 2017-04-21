@@ -1,8 +1,8 @@
 module.exports = app => {
-  class User extends app.Service {
+  class Article extends app.Service {
     async create(target) {
       const article = new this.ctx.model.article(Object.assign({
-        createDate: this.ctx.helper.currentTime(),
+        created_at: this.ctx.helper.currentTime(),
       }, target))
       const result = await article.save();
       return result;
@@ -34,5 +34,5 @@ module.exports = app => {
       return result;
     }
   }
-  return User;
+  return Article;
 };

@@ -3,7 +3,7 @@ module.exports = mongoose => {
   const ArticleSchema = new Schema({
     title: { type: String, required: true },
 		content: { type: String, required: true },
-		createDate: { type: String, required: true },
+		created_at: { type: String, required: true },
     tags: { type: [String], required: false },
     author: { type: Schema.Types.ObjectId, required: false, ref: 'User' },
 		like: { type: Number, required: false },
