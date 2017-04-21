@@ -25,16 +25,5 @@ exports.cors = {
   enable: true,
   package: 'egg-cors',
 };
-
-exports.passportGithub = {
-  enable: true,
-  package: 'egg-passport-github',
-};
-
-exports.passportWeibo = {
-  enable: true,
-  package: 'egg-passport-weibo',
-};
-
 // had enabled by egg
 // exports.static = true;
