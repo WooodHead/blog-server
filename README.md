@@ -1,6 +1,6 @@
 # blog-server
 
-
+egg + mongodb
 
 ## QuickStart
 
@@ -12,7 +12,7 @@ see [egg docs][egg] for more detail.
 ```shell
 $ npm install
 $ npm run dev
-$ open http://localhost:7001/news
+$ open http://localhost:7001/api/users
 ```
 
 ### Deploy
@@ -31,3 +31,34 @@ $ EGG_SERVER_ENV=prod npm start
 
 
 [egg]: https://eggjs.org
+
+### api
+
+```
+GET /api/users
+POST /api/users
+
+GET /api/articles
+POST /api/articles
+PUT /api/articles/:id
+DELETE /api/articles/:id
+
+GET /api/movies
+POST /api/movies
+PUT /api/movies/:id
+DELETE /api/movies/:id
+
+GET /api/music
+POST /api/music
+PUT /apimusic/:id
+DELETE /api/music/:id
+
+GET /api/articles/:id/comments
+POST /api/articles/:id/comments
+
+GET /api/movies/:id/comments
+POST /api/movies/:id/comments
+```
+
+
+
