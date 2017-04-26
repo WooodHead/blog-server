@@ -1,14 +1,18 @@
+const sendToWormhole = require('stream-wormhole');
+const fs = require('fs');
+const path = require('path');
+
 // 定义创建接口的请求参数规则
 const createRule = {
 	name: { type: 'string', required: true },
-    image: { type: 'string', required: false },
-    singer: { type: 'string', required: false },
-    composer: { type: 'string', required: false },
-    arranger: { type: 'string', required: false },
-    lyricist: { type: 'string', required: false },
-    lyric: { type: 'string', required: false },
-    style: { type: 'string', required: true },
-    src: { type: 'string', required: true },
+	image: { type: 'string', required: false },
+	singer: { type: 'string', required: false },
+	composer: { type: 'string', required: false },
+	arranger: { type: 'string', required: false },
+	lyricist: { type: 'string', required: false },
+	lyric: { type: 'string', required: false },
+	style: { type: 'string', required: true },
+	src: { type: 'string', required: true },
 	publisher: { type: 'string', required: true },
 }
 
@@ -57,6 +61,23 @@ module.exports = app => {
 			const { ctx, service } = this;
 			const { id } = ctx.params;
 			await service.music.remove(id);
+			ctx.status = 200;
+		}
+		async upload() {
+			const { ctx, service } = this;
+			const stream = await ctx.getFileStream();
+			const filename = ctx.helper.changeFilename(stream.filename);
+			const name = path.resolve(`app/public/music/${filename}`);
+			try {
+				const writerStream = fs.createWriteStream(name);
+				stream.pipe(writerStream);
+			} catch (err) {
+				await sendToWormhole(stream);
+				throw err;
+			}
+			ctx.body = {
+				url: `/public/music/${filename}`,
+			};
 			ctx.status = 200;
 		}
 	}

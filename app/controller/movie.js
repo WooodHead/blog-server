@@ -1,9 +1,11 @@
+const fs = require('fs');
+const path = require('path');
+
 // 定义创建接口的请求参数规则
 const createRule = {
 	name: { type: 'string', required: true },
-    hits: { type: 'number', required: false },
-    cover: { type: 'string', required: false },
-    src: { type: 'string', required: true },
+	hits: { type: 'number', required: false },
+	src: { type: 'string', required: true },
 	publisher: { type: 'string', required: true },
 }
 
@@ -29,9 +31,27 @@ module.exports = app => {
 		}
 		async create() {
 			const { ctx, service } = this;
-			// 校验参数
-			ctx.validate(createRule);
-			const movie = await service.movie.create(ctx.request.body);
+			let movie;
+			if (ctx.request.header['content-type'].indexOf('multipart/') !== -1) {
+				// 校验参数
+				const stream = await ctx.getFileStream();
+				ctx.validate(createRule, stream.fields);
+				const filename = ctx.helper.changeFilename(stream.filename);
+				const name = path.resolve(`app/public/images/pictures/${filename}`);
+				try {
+					const writerStream = fs.createWriteStream(name);
+					stream.pipe(writerStream);
+				} catch (err) {
+					await sendToWormhole(stream);
+					throw err;
+				}
+				movie = await service.movie.create(Object.assign(stream.fields, {
+					cover: `/public/images/pictures/${filename}`
+				}));
+			} else {
+				ctx.validate(createRule);
+				movie = await service.movie.create(ctx.request.body);
+			}
 			ctx.body = {
 				movie
 			};
@@ -58,7 +78,7 @@ module.exports = app => {
 			const { ctx, service } = this;
 			const { id } = ctx.params;
 			const query = ctx.query;
-			delete query.id; 
+			delete query.id;
 			const result = await service.comment.search(Object.assign(query, {
 				movie: id
 			}));
@@ -70,7 +90,7 @@ module.exports = app => {
 		}
 		async postComment() {
 			const { ctx, service } = this;
-			const { id } = ctx.params; 
+			const { id } = ctx.params;
 			ctx.validate({
 				content: { type: 'string', required: true },
 				commenter: { type: 'string', required: true },
@@ -82,6 +102,23 @@ module.exports = app => {
 			ctx.body = {
 				comment
 			}
+			ctx.status = 200;
+		}
+		async upload() {
+			const { ctx, service } = this;
+			const stream = await ctx.getFileStream();
+			const filename = ctx.helper.changeFilename(stream.filename);
+			const name = path.resolve(`app/public/movies/${filename}`);
+			try {
+				const writerStream = fs.createWriteStream(name);
+				stream.pipe(writerStream);
+			} catch (err) {
+				await sendToWormhole(stream);
+				throw err;
+			}
+			ctx.body = {
+				url: `/public/movies/${filename}`,
+			};
 			ctx.status = 200;
 		}
 	}

@@ -43,6 +43,10 @@ module.exports = appInfo => {
       github_oauth_url: 'https://github.com/login/oauth/authorize',
       github_oauth_token: 'https://github.com/login/oauth/access_token',
     },
+
+    multipart: {
+      fileSize: '60mb',
+    }
   };
 
   return config;

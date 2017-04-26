@@ -2,6 +2,7 @@
 const moment = require('moment');
 const async = require('async');
 const formidable = require('formidable');
+const uuid = require('node-uuid');
 
 module.exports = {
   foo(param) {
@@ -12,13 +13,14 @@ module.exports = {
   currentTime() {
     return moment().format('YYYY-MM-DD HH:mm:ss');
   },
-  search(query, Model, populate = '', /*模糊查询*/ isLike = true) {
-    return new Promise((resolve, reject) => {
+  search(query, Model, populate = '') {
+    const pageQuery = (query, Model, populate, callback) => {
       let pagination = { current: 1, pageSize: 10 };
       let queryParams = {}
       let sorter = { "_id": 'desc' };
       let sorterField;
       let order;
+
       for (let key in query) {
         if (key === 'current' || key === 'pageSize') {
           pagination[key] = +query[key];
@@ -26,9 +28,14 @@ module.exports = {
           if (key === 'sorter') sorterField = query[key];
           if (key === 'order') order = query[key]
         } else {
-          queryParams[key] = isLike ? new RegExp(query[key]) : query[key];
+          if (Model.schema.obj[key].type.schemaName === 'ObjectId') {
+            queryParams[key] = query[key];
+          } else {
+            queryParams[key] = new RegExp(query[key]);
+          }
         }
       }
+
       if (sorterField && order) sorter = { [sorterField]: order };
 
       const current = pagination.current;
@@ -52,14 +59,16 @@ module.exports = {
           });
         }
       }, function (err, results) {
-        if (err) {
-          reject(err);
-          return false;
-        }
         const count = results.count;
         $page.pagination.total = count;
         $page.results = results.records;
-        resolve($page);
+        callback(err, $page);
+      });
+    }
+    return new Promise((resolve, reject) => {
+      pageQuery(query, Model, populate, (err, page) => {
+        if (err) reject(err);
+        else resolve(page);
       });
     })
   },
@@ -129,5 +138,9 @@ module.exports = {
   hashEncodeSync(password, rounds = 5) {
     const salt = bcrypt.genSaltSync(rounds);
     return bcrypt.hashSync(password, salt);
+  },
+  changeFilename(filename, ext) {
+    const _ext = ext ? ext : filename.split('.')[1];
+    return `${uuid.v1()}.${_ext}`;
   }
 };
