@@ -12,6 +12,7 @@ module.exports = app => {
         }
         async callback() {
             const { ctx, service, config } = this;
+            const root_path = config.root_path;
             const ip = config.ip;
             const { client_id, client_secret, redirect_uri, scope, state, github_oauth_token } = config.githubOauth;
             const query = ctx.query;
