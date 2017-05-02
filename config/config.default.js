@@ -32,7 +32,7 @@ module.exports = appInfo => {
     keys: appInfo.name + '_1490928873243_4696',
 
     mongoose: {
-      url: `mongodb://localhost:27017/blog`,
+      url: `mongodb://${ip}:27017/blog`,
       options: {}
     },
 
