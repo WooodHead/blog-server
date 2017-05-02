@@ -14,7 +14,8 @@ module.exports = app => {
         const user = await service.user.create({
           username: `${login}_${new Date().getTime()}`,
           password: 123456,
-          name: login
+          name: login,
+          photo: '/public/images/photos/chh1.jpg'
         })
         oauth = await service.oauth.create({
           user_id: user._id,
