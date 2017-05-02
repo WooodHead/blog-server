@@ -1,7 +1,14 @@
 'use strict';
 
+const ip = '119.23.242.131';
+
 module.exports = appInfo => {
   const config = {
+
+    root_path: `http://${ip}:7001`,
+
+    ip,
+
     // 加载 errorHandler 中间件
     middleware: ['errorHandler'],
 
@@ -17,7 +24,7 @@ module.exports = appInfo => {
     keys: appInfo.name + '_1490928873243_4696',
 
     mongoose: {
-      url: 'mongodb://localhost:27017/blog',
+      url: `mongodb://${ip}:27017/blog`,
       options: {}
     },
 

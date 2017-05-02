@@ -1,10 +1,10 @@
-const root_path = 'http://localhost:7001';
 const type = 'github';
 
 module.exports = app => {
     class GithubController extends app.Controller {
         async index() {
             const { ctx, service, config } = this;
+            const root_path = config.root_path;
             const { client_id, client_serct, redirect_uri, scope, state, github_api_root_path, github_oauth_url, github_oauth_token } = config.githubOauth;
             const query = ctx.query;
             const resp = await ctx.curl(`${github_oauth_url}?client_id=${client_id}&redirect_uri=${root_path}${redirect_uri}&scope=${scope}&state=${state}`);
@@ -12,6 +12,7 @@ module.exports = app => {
         }
         async callback() {
             const { ctx, service, config } = this;
+            const ip = config.ip;
             const { client_id, client_secret, redirect_uri, scope, state, github_oauth_token } = config.githubOauth;
             const query = ctx.query;
             const resp = await ctx.curl(`${github_oauth_token}`, {
@@ -28,7 +29,7 @@ module.exports = app => {
             const access_token = resp.data.access_token;
             const githubUser = await service.github.getUser(access_token);
             const user_id = await service.oauth.bind(githubUser.login, type);
-            ctx.redirect(`http://localhost:8000?access_token=${access_token}&user_id=${user_id}`);
+            ctx.redirect(`http://${ip}:8000?access_token=${access_token}&user_id=${user_id}`);
         }
         async getUser() {
             const { ctx, service, config } = this;
