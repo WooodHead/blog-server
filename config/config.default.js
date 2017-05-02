@@ -51,7 +51,7 @@ module.exports = appInfo => {
     githubOauth: {
       client_id: 'a014675859f3919ba9fb',
       client_secret: 'f83e4cee696203e67aaac046453b658d2f1de312',
-      redirect_uri: `${ip}:${client_port}/oauth/github/callback`,
+      redirect_uri: `${root_path}/oauth/github/callback`,
       scope: 'repo,gist',
       state: '123',
       github_api_root_path: 'https://api.github.com',
