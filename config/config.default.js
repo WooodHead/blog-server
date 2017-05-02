@@ -1,13 +1,21 @@
 'use strict';
 
 const ip = '119.23.242.131';
+const client_port = '5000';
+const root_path = `http://${ip}:7001`;
+
+// const ip = 'localhost';
+// const client_port = '8000';
+// const root_path = `http://${ip}:7001`;
 
 module.exports = appInfo => {
   const config = {
 
-    root_path: `http://${ip}:7001`,
+    root_path,
 
     ip,
+
+    client_port,
 
     // 加载 errorHandler 中间件
     middleware: ['errorHandler'],
@@ -24,7 +32,7 @@ module.exports = appInfo => {
     keys: appInfo.name + '_1490928873243_4696',
 
     mongoose: {
-      url: `mongodb://${ip}:27017/blog`,
+      url: `mongodb://localhost:27017/blog`,
       options: {}
     },
 
@@ -43,7 +51,7 @@ module.exports = appInfo => {
     githubOauth: {
       client_id: 'a014675859f3919ba9fb',
       client_secret: 'f83e4cee696203e67aaac046453b658d2f1de312',
-      redirect_uri: '/oauth/github/callback',
+      redirect_uri: `${ip}:${client_port}/oauth/github/callback`,
       scope: 'repo,gist',
       state: '123',
       github_api_root_path: 'https://api.github.com',
