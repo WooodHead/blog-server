@@ -12,7 +12,7 @@ module.exports = app => {
         async callback() {
             const { ctx, service, config } = this;
             const ip = config.ip;
-            const client_port = config.client_id;
+            const client_port = config.client_port;
             const { client_id, client_secret, redirect_uri, scope, state, github_oauth_token } = config.githubOauth;
             const query = ctx.query;
             const resp = await ctx.curl(`${github_oauth_token}`, {
