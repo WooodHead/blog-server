@@ -7,6 +7,7 @@ const createRule = {
 	hits: { type: 'number', required: false },
 	src: { type: 'string', required: true },
 	publisher: { type: 'string', required: true },
+	description: { type: 'string', required: true },
 }
 
 module.exports = app => {

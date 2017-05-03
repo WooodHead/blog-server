@@ -13,7 +13,9 @@ module.exports = app => {
                 }
             });
             if (resp.status !== 200) {
-                throw new Error(resp.data.message);
+                const error = ctx.error(resp.data.message); 
+                error.status = 401;
+                throw error;
             }
             return true;
         }

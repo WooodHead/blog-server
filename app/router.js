@@ -13,16 +13,17 @@ module.exports = app => {
 
   app.resources('articles', '/api/articles', 'article');
   app.get('/api/articles/:id/comments', 'article.getComments');
-  app.post('/api/articles/:id/comments', 'article.postComment');
+  app.post('/api/articles/:id/comments', isAuthenticated, 'article.postComment');
 
   app.resources('movies', '/api/movies', 'movie');
   app.get('/api/movies/:id/comments', 'movie.getComments');
-  app.post('/api/movies/:id/comments', 'movie.postComment');
+  app.post('/api/movies/:id/comments', isAuthenticated, 'movie.postComment');
   app.post('/api/movies/upload', 'movie.upload');
 
   app.resources('music', '/api/music', 'music');
   app.post('/api/music/upload', 'music.upload');
 
+  app.post('message', '/api/messages', isAuthenticated, 'message.create')
   app.resources('messages', '/api/messages', 'message');
 
 };

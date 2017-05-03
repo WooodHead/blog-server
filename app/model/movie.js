@@ -7,6 +7,7 @@ module.exports = mongoose => {
     cover: { type: String, required: false },
     src: { type: String, required: true },
     publisher: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
+    description: { type: String, required: true },
   });
 
   return mongoose.model('Movie', MovieSchema);
