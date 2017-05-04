@@ -1,7 +1,7 @@
 'use strict';
 
-const ip = '119.23.242.131';
-const client_port = '5000';
+const ip = 'www.qingye.red';
+const client_port = '80';
 const root_path = `http://${ip}:7001`;
 
 // const ip = 'localhost';
@@ -45,7 +45,7 @@ module.exports = appInfo => {
 
     security: {
       csrf: false,
-      domainWhiteList: ['localhost', 'http://localhost:8000', 'github.com', 'http://119.23.242.131:5000', '119.23.242.131'],
+      domainWhiteList: ['localhost', 'http://localhost:8000', 'github.com', 'http://119.23.242.131:5000', '119.23.242.131', 'http://www.qingye.red', 'www.qingye.red'],
     },
 
     githubOauth: {
