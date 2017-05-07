@@ -1,6 +1,8 @@
 'use strict';
 
-const ip = 'www.qingye.red';
+
+// const ip = 'www.qingye.red';
+const ip = '119.23.242.131';
 const client_port = '80';
 const root_path = `http://${ip}:7001`;
 

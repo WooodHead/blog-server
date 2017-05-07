@@ -26,4 +26,8 @@ module.exports = app => {
   app.post('message', '/api/messages', isAuthenticated, 'message.create')
   app.resources('messages', '/api/messages', 'message');
 
+
+  app.post('/api/dangdang/login', 'dangdang.login');
+  app.get('/api/dangdang/showCode', 'dangdang.showCode');
+  app.get('/api/dangdang/panicBuying', 'dangdang.panicBuying');
 };
