@@ -4,6 +4,8 @@ const buy_url = 'http://product.m.dangdang.com/h5ajax.php';
 
 const MDD_sid = '5c07dd10406ed6f2f91a8a2637795767';
 const MDD_permanent_id = '20170507111153973851676202589160376';
+let MDD_token = '';
+let MDD_uid = '';
 
 module.exports = app => {
 	class DangdangController extends app.Controller {
@@ -37,6 +39,10 @@ module.exports = app => {
                     username: data.username
                 }
             })
+            if (result.data.errorCode === 0) {
+                MDD_token = result.data.userinfo.token_id;
+                MDD_uid = result.data.userinfo.custid;
+            }
 			ctx.status = result.status;
             ctx.set(result.headers);
             ctx.body = result.data;
@@ -47,11 +53,11 @@ module.exports = app => {
                 method: 'GET',
                 dataType: 'json',
                 headers: {
-                    cookie: `MDD_sid=${MDD_sid};`
+                    cookie: `MDD_sid=${MDD_sid};MDD_token=${MDD_token};MDD_uid=${MDD_uid}`
                 },
                 data: {
                     action: 'one_click_buying',
-                    pid: '25072443',    //  tagret: 25071971  ; test: 25072443
+                    pid: '25071971',    //  tagret: 25071971  ; test: 25072443
                     count: 1,
                     sid: MDD_sid
                 }
