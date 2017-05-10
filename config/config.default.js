@@ -19,6 +19,8 @@ module.exports = appInfo => {
 
     client_port,
 
+    expiresIn: 3600,
+
     // 加载 errorHandler 中间件
     middleware: ['errorHandler'],
 
