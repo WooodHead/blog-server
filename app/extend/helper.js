@@ -3,13 +3,9 @@ const moment = require('moment');
 const async = require('async');
 const formidable = require('formidable');
 const uuid = require('node-uuid');
+const bcrypt = require('bcrypt-nodejs');
 
 module.exports = {
-  foo(param) {
-    // this 是 helper 对象，在其中可以调用其他 helper 方法
-    // this.ctx => context 对象
-    // this.app => application 对象
-  },
   currentTime() {
     return moment().format('YYYY-MM-DD HH:mm:ss');
   },
@@ -118,14 +114,14 @@ module.exports = {
       });
     })
   },
-  hashEncode(password, rounds = 5) {
+  hashEncode(str, rounds = 5) {
     return new Promise((resolve, reject) => {
       bcrypt.genSalt(rounds, (err, salt) => {
         if (err) {
           reject(err);
           return false;
         }
-        bcrypt.hash(password, salt, null, function (err, hash) {
+        bcrypt.hash(str, salt, null, function (err, hash) {
           if (err) {
             reject(err);
             return false;
@@ -135,12 +131,15 @@ module.exports = {
       });
     })
   },
-  hashEncodeSync(password, rounds = 5) {
+  hashEncodeSync(str, rounds = 5) {
     const salt = bcrypt.genSaltSync(rounds);
-    return bcrypt.hashSync(password, salt);
+    return bcrypt.hashSync(str, salt);
   },
   changeFilename(filename, ext) {
     const _ext = ext ? ext : filename.split('.')[1];
     return `${uuid.v1()}.${_ext}`;
+  },
+  getUUID() {
+    return uuid.v4();
   }
 };

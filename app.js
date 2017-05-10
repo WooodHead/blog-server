@@ -2,6 +2,7 @@ const BearerStrategy = require('passport-http-bearer').Strategy;
 
 // app.js
 module.exports = app => {
+
   app.passport.use(new BearerStrategy({ passReqToCallback: true }, async (req, accessToken, done) => {
     try {
       const service = req.ctx.service;

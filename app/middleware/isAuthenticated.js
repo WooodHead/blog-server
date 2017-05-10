@@ -1,7 +1,8 @@
 module.exports = options => {
     return async (ctx, next) => {
         const { service } = ctx;
-        const result = await service.oauth.check('github');
+        const access_token = ctx.getAccessToken();
+        const result = await service.accessToken.existed(access_token);
         if (result) {
             await next()
         } else {

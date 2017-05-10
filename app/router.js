@@ -9,6 +9,8 @@ module.exports = app => {
   app.get('/oauth/github/user', 'github.getUser');
   app.post('/oauth/bind_account', 'oauth.bind');
 
+  app.post('/api/login', 'auth.login');
+
   app.resources('users', '/api/users', 'users');
 
   app.resources('articles', '/api/articles', 'article');

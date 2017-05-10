@@ -11,8 +11,7 @@ module.exports = app => {
         }
         async callback() {
             const { ctx, service, config } = this;
-            const ip = config.ip;
-            const client_port = config.client_port;
+            const { ip, client_port, expiresIn} = config;
             const { client_id, client_secret, redirect_uri, scope, state, github_oauth_token } = config.githubOauth;
             const query = ctx.query;
             const resp = await ctx.curl(`${github_oauth_token}`, {
@@ -29,6 +28,7 @@ module.exports = app => {
             const access_token = resp.data.access_token;
             const githubUser = await service.github.getUser(access_token);
             const user_id = await service.oauth.bind(githubUser.login, type);
+            const accessToken = await service.accessToken.create(access_token, Math.floor(Date.now() / 1000) + expiresIn, user_id);
             ctx.redirect(`http://${ip}:${client_port}?access_token=${access_token}&user_id=${user_id}`);
         }
         async getUser() {

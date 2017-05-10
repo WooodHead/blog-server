@@ -37,6 +37,17 @@ module.exports = app => {
       const result = await this.ctx.helper.search(query, this.ctx.model.user);
       return result;
     }
+    async login(target) {
+      const { ctx } = this;
+      const user = await ctx.model.user.findOne({username: target.username});
+      if (!user) throw ctx.error('账号不存在');
+      const result = await user.verifyPassword(target.password);
+      if (result) {
+        return user;
+      } else {
+        throw ctx.error('密码错误');
+      }
+    }
   }
   return User;
 };

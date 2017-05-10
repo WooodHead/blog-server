@@ -25,11 +25,13 @@ module.exports = mongoose => {
     })
   });
 
-  UserSchema.methods.verifyPassword = function (password, cb) {
-    bcrypt.compare(password, this.password, function (err, isMatch) {
-      if (err) return cb(err);
-      cb(null, isMatch);
-    });
+  UserSchema.methods.verifyPassword = function (password) {
+    return new Promise((resolve, reject) => {
+      bcrypt.compare(password, this.password, function (err, isMatch) {
+        if (err) return reject(err);
+        resolve(isMatch);
+      });
+    })
   };
 
   return mongoose.model('User', UserSchema);
