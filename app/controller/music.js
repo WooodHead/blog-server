@@ -23,7 +23,7 @@ module.exports = app => {
 			const result = await service.music.search(ctx.query);
 			ctx.body = {
 				pagination: result.pagination,
-				music: result.results
+				music: result.records
 			};
 			ctx.status = 201;
 		}

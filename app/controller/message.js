@@ -11,7 +11,7 @@ module.exports = app => {
 			const result = await service.message.search(ctx.query);
 			ctx.body = {
 				pagination: result.pagination,
-				messages: result.results
+				messages: result.records
 			};
 			ctx.status = 201;
 		}

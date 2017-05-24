@@ -13,7 +13,7 @@ module.exports = app => {
 			const result = await service.article.search(ctx.query);
 			ctx.body = {
 				pagination: result.pagination,
-				articles: result.results
+				articles: result.records
 			};
 			ctx.status = 201;
 		}
@@ -63,7 +63,7 @@ module.exports = app => {
 			}));
 			ctx.body = {
 				pagination: result.pagination,
-				comments: result.results,
+				comments: result.records,
 			}
 			ctx.status = 200;
 		}

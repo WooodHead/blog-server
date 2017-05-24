@@ -1,45 +1,49 @@
 // 定义创建接口的请求参数规则
 const createRule = {
-	commenter: { type: 'string', required: true },
-    content: { type: 'string', required: true },
+	members: { type: 'array', required: true },
 }
 
 module.exports = app => {
-	class CommentController extends app.Controller {
+	class ChatRoomController extends app.Controller {
 		async index() {
 			const { ctx, service } = this;
-			const result = await service.comment.search(ctx.query);
+			const result = await service.chatRoom.search(ctx.query);
 			ctx.body = {
 				pagination: result.pagination,
-				comments: result.records
+				chatRooms: result.records
 			};
 			ctx.status = 201;
 		}
 		async show() {
 			const { ctx, service } = this;
 			const { id } = ctx.params;
-			const comment = await service.comment.find(id);
+			const chatRoom = await service.chatRoom.find(id);
 			ctx.body = {
-				comment
+				chatRoom
 			};
 			ctx.status = 200;
 		}
 		async create() {
 			const { ctx, service } = this;
+			const data = ctx.request.body;
 			// 校验参数
 			ctx.validate(createRule);
-			const comment = await service.comment.create(ctx.request.body);
+            let chatRoom = await service.chatRoom.findOneByMembers(data.members);
+            if (!chatRoom) {
+			    chatRoom = await service.chatRoom.create(data);
+            }
+			await service.chatRoom.setRead(chatRoom);
 			ctx.body = {
-				comment
+				chat_room: chatRoom
 			};
 			ctx.status = 201;
 		}
 		async update() {
 			const { ctx, service } = this;
 			ctx.validate(createRule);
-			let comment = ctx.request.body;
-			comment._id = ctx.params.id;
-			const id = await service.comment.update(ctx.request.body);
+			let chatRoom = ctx.request.body;
+			chatRoom._id = ctx.params.id;
+			const id = await service.chatRoom.update(ctx.request.body);
 			ctx.body = {
 				id
 			};
@@ -48,9 +52,9 @@ module.exports = app => {
 		async destroy() {
 			const { ctx, service } = this;
 			const { id } = ctx.params;
-			await service.comment.remove(id);
+			await service.chatRoom.remove(id);
 			ctx.status = 200;
 		}
 	}
-	return CommentController;
+	return ChatRoomController;
 }

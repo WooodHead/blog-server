@@ -8,7 +8,7 @@ module.exports = app => {
       return result;
     }
     async search(query) {
-      const result = await this.ctx.helper.search(query, this.ctx.model.comment, 'commenter', false);
+      const result = await this.ctx.helper.search(query, this.ctx.model.comment, 'commenter');
       return result;
     }
   }

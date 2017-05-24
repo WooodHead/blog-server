@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const sendToWormhole = require('stream-wormhole');
 
 // 定义创建接口的请求参数规则
 const createRule = {
@@ -17,7 +18,7 @@ module.exports = app => {
 			const result = await service.movie.search(ctx.query);
 			ctx.body = {
 				pagination: result.pagination,
-				movies: result.results
+				movies: result.records
 			};
 			ctx.status = 201;
 		}
@@ -85,7 +86,7 @@ module.exports = app => {
 			}));
 			ctx.body = {
 				pagination: result.pagination,
-				comments: result.results,
+				comments: result.records,
 			}
 			ctx.status = 200;
 		}

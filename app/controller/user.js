@@ -1,3 +1,7 @@
+const fs = require('fs');
+const path = require('path');
+const sendToWormhole = require('stream-wormhole');
+
 // 定义创建接口的请求参数规则
 const createRule = {
 	username: 'string',
@@ -11,20 +15,20 @@ const createRule = {
 }
 
 module.exports = app => {
-	class UsersController extends app.Controller {
+	class UserController extends app.Controller {
 		async index() {
 			const { ctx, service } = this;
 			const result = await service.user.search(ctx.query);
 			ctx.body = {
 				pagination: result.pagination,
-				users: result.results
+				users: result.records
 			};
 			ctx.status = 201;
 		}
 		async show() {
 			const { ctx, service } = this;
 			const { id } = ctx.params;
-			const user = await service.user.find({_id: id});
+			const user = await service.user.find({ _id: id });
 			ctx.body = {
 				user
 			};
@@ -67,16 +71,51 @@ module.exports = app => {
 		}
 		async uploadPhoto() {
 			const { ctx, service } = this;
-			const url = await ctx.helper.uploadImage(ctx.req, {
-				uploadDir: './public/images/photo/',
-			});
-			const avatar_url = url.split('./public')[1];
-			const id = await service.update({_id: ctx.params.id, avatar_url})
+			const stream = await ctx.getFileStream();
+			const filename = ctx.helper.changeFilename(stream.filename);
+			const filePath = path.resolve(`app/public/images/photo/${filename}`);
+			try {
+				const writerStream = fs.createWriteStream(filePath);
+				stream.pipe(writerStream);
+			} catch (err) {
+				await sendToWormhole(stream);
+				throw err;
+			}
+			const avatar_url = `/public/images/photo/${filename}`;
+			const id = await service.update({ _id: ctx.params.id, avatar_url })
 			ctx.body = {
 				id
 			};
 			ctx.status = 200;
 		}
+		async getFollowers() {
+			const { ctx, service } = this;
+			const { id } = ctx.params;
+			const followers = await service.follow.getFollowersByUserId(id);
+			ctx.body = {
+				users: followers.map(item => item.follower)
+			}
+			ctx.status = 200;
+		}
+		async getFollowings() {
+			const { ctx, service } = this;
+			const { id } = ctx.params;
+			const followings = await service.follow.getFollowingsByUserId(id);
+			ctx.body = {
+				users: followings.map(item => item.following)
+			}
+			ctx.status = 200;
+		}
+		async follow() {
+			const { ctx, service } = this;
+			const { id } = ctx.params;
+			const accessToken = await service.accessToken.find(ctx.getAccessToken());
+			const follow = await service.follow.create({
+				user_id: accessToken.user_id,
+				follower: id,
+			});
+			ctx.status = 204;
+		}
 	}
-	return UsersController;
+	return UserController;
 }

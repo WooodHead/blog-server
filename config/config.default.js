@@ -65,6 +65,20 @@ module.exports = appInfo => {
 
     multipart: {
       fileSize: '60mb',
+    },
+
+    io: {
+      init: {}, // passed to engine.io
+      namespace: {
+        '/chat': {
+          connectionMiddleware: ['auth'],
+          packetMiddleware: [],
+        },
+      },
+      // redis: {
+      //   host: '127.0.0.1',
+      //   port: 6379
+      // }
     }
   };
 

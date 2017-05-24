@@ -11,7 +11,7 @@ module.exports = app => {
         }
         async callback() {
             const { ctx, service, config } = this;
-            const { ip, client_port, expiresIn} = config;
+            const { ip, client_port, expiresIn } = config;
             const { client_id, client_secret, redirect_uri, scope, state, github_oauth_token } = config.githubOauth;
             const query = ctx.query;
             const resp = await ctx.curl(`${github_oauth_token}`, {
@@ -50,8 +50,8 @@ module.exports = app => {
                 dataType: 'json',
                 headers: {
                     authorization: `basic ${basic}`,
-                    'Content-Type': 'application/json',  
-                }  
+                    'Content-Type': 'application/json',
+                }
             });
         }
     }
