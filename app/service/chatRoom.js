@@ -26,7 +26,7 @@ module.exports = app => {
       }
     }
     async update(target) {
-      const chatRoom = await this.ctx.model.chatRoom.findById(target);
+      const chatRoom = await this.ctx.model.chatRoom.updateById(target);
       return chatRoom;
     }
     async search(query) {

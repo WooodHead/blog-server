@@ -16,7 +16,7 @@ module.exports = app => {
   app.get('/api/user/followers', isAuthenticated, 'user.getFollowers');
   app.get('/api/users/:id/followings', 'user.getFollowings');
   app.get('/api/user/followings', isAuthenticated, 'user.getFollowings');
-  app.put('/api/user/following/:id', isAuthenticated, 'user.follow');
+  app.post('/api/user/following/:id', isAuthenticated, 'user.follow');
 
   app.resources('articles', '/api/articles', 'article');
   app.get('/api/articles/:id/comments', 'article.getComments');
@@ -32,11 +32,6 @@ module.exports = app => {
 
   app.post('message', '/api/messages', isAuthenticated, 'message.create')
   app.resources('messages', '/api/messages', 'message');
-
-
-  app.post('/api/dangdang/login', 'dangdang.login');
-  app.get('/api/dangdang/showCode', 'dangdang.showCode');
-  app.get('/api/dangdang/panicBuying', 'dangdang.panicBuying');
 
   app.resources('chat_rooms', '/api/chat_rooms', 'chatRoom');
 

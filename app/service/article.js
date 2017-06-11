@@ -19,15 +19,10 @@ module.exports = app => {
       }
     }
     async update(target) {
-      const article = await this.ctx.model.article.findById({_id: target._id});
-      if (article) {
-        for (let key in target) {
-          article[key] = target[key];
-        }
-        const doc = await article.save();
-        return doc;
-      }
-      return undefined;
+      const article = await this.ctx.model.article.update({_id: target._id}, Object.assign({
+        updated_at: this.ctx.helper.currentTime
+      }, target));
+      return article;
     }
     async search(query) {
       const result = await this.ctx.helper.search(query, this.ctx.model.article, 'author');

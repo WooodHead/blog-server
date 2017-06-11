@@ -1,6 +1,4 @@
-const fs = require('fs');
 const path = require('path');
-const sendToWormhole = require('stream-wormhole');
 
 // 定义创建接口的请求参数规则
 const createRule = {
@@ -39,14 +37,7 @@ module.exports = app => {
 				const stream = await ctx.getFileStream();
 				ctx.validate(createRule, stream.fields);
 				const filename = ctx.helper.changeFilename(stream.filename);
-				const name = path.resolve(`app/public/images/pictures/${filename}`);
-				try {
-					const writerStream = fs.createWriteStream(name);
-					stream.pipe(writerStream);
-				} catch (err) {
-					await sendToWormhole(stream);
-					throw err;
-				}
+				await ctx.fileUpload(stream, path.resolve(`app/public/images/pictures/${filename}`))
 				movie = await service.movie.create(Object.assign(stream.fields, {
 					cover: `/public/images/pictures/${filename}`
 				}));

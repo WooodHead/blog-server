@@ -8,6 +8,7 @@ module.exports = mongoose => {
     author: { type: Schema.Types.ObjectId, required: false, ref: 'User' },
 		like: { type: Number, required: false },
 		reading: { type: Number, required: false },
+    cover: { type: String, required: false },
   });
 
   return mongoose.model('Article', ArticleSchema);
