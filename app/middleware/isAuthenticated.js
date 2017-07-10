@@ -6,8 +6,7 @@ module.exports = options => {
         if (result) {
             await next()
         } else {
-            const error = new Error('access_token过期或不存在');
-            error.status = 401;
+            ctx.throw(403, 'access_token过期或不存在')
         } 
     }
 }
