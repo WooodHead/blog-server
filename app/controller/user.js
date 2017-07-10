@@ -73,16 +73,10 @@ module.exports = app => {
 			const { ctx, service } = this;
 			const stream = await ctx.getFileStream();
 			const filename = ctx.helper.changeFilename(stream.filename);
-			const filePath = path.resolve(`app/public/images/photo/${filename}`);
-			try {
-				const writerStream = fs.createWriteStream(filePath);
-				stream.pipe(writerStream);
-			} catch (err) {
-				await sendToWormhole(stream);
-				throw err;
-			}
-			const avatar_url = `/public/images/photo/${filename}`;
-			const id = await service.update({ _id: ctx.params.id, avatar_url })
+			console.log(filename, 123)
+			await ctx.fileUpload(stream, path.resolve(`app/public/images/photos/${filename}`))
+			const photo = `/public/images/photos/${filename}`;
+			const id = await service.user.updatePhoto(ctx.params.id, photo)
 			ctx.body = {
 				id
 			};
