@@ -110,10 +110,12 @@ module.exports = app => {
 			const { ctx, service } = this;
 			const { id } = ctx.params;
 			const accessToken = await service.accessToken.find(ctx.getAccessToken());
-			const follow = await service.follow.create({
-				user_id: accessToken.user_id,
-				follower: id,
-			});
+			const target = {
+				following: id,
+				follower: accessToken.user_id,
+			}
+			await service.follow.checkFollowed(target);
+			await service.follow.create(target);
 			ctx.status = 204;
 		}
 	}

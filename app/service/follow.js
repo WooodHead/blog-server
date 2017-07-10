@@ -19,6 +19,12 @@ module.exports = app => {
       const following = await this.ctx.model.follow.find({follower: id}).populate('following');
       return following;
     }
+    async checkFollowed(target) {
+      const follow = await this.find(target);
+      if (follow) {
+        this.ctx.throw(500, '已关注该用户');
+      } 
+    }
   }
   return Follow;
 };

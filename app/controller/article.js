@@ -37,6 +37,9 @@ module.exports = app => {
 					tags: stream.fields.tags.split(',')
 				}));
 				const filename = ctx.helper.changeFilename(stream.filename);
+				if (stream.fields.tags.length === 1 && !stream.fields.tags[0]) {
+					delete stream.fields.tags;
+				}
 				await ctx.fileUpload(stream, path.resolve(`app/public/images/pictures/${filename}`))
 				article = await service.article.create(Object.assign(stream.fields, {
 					cover: `/public/images/pictures/${filename}`
@@ -60,6 +63,9 @@ module.exports = app => {
 				}));
 				const filename = ctx.helper.changeFilename(stream.filename);
 				await ctx.fileUpload(stream, path.resolve(`app/public/images/pictures/${filename}`))
+				if (stream.fields.tags.length === 1 && !stream.fields.tags[0]) {
+					delete stream.fields.tags;
+				}
 				article = await service.article.update(Object.assign(stream.fields, {
 					cover: `/public/images/pictures/${filename}`
 				}));

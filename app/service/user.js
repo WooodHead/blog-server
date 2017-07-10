@@ -1,6 +1,7 @@
 module.exports = app => {
   class User extends app.Service {
     async create(target) {
+      target.password = this.ctx.helper.hashEncodeSync(target.password);
       const user = new this.ctx.model.user(Object.assign({
         created_at: this.ctx.helper.currentTime(),
       }, target))
@@ -41,7 +42,7 @@ module.exports = app => {
       const { ctx } = this;
       const user = await ctx.model.user.findOne({username: target.username});
       if (!user) throw ctx.error('账号不存在');
-      const result = await user.verifyPassword(target.password);
+      const result = ctx.helper.compareSync(target.password, user.password);   
       if (result) {
         return user;
       } else {

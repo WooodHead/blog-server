@@ -18,7 +18,7 @@ module.exports = app => {
     const socket = yield this.service.socket.findOneByUserId(payload.target_id);
     if (socket) {
       app.io.of('chat').sockets[socket.socket_id] ? 
-        app.io.of('chat').sockets[socket.socket_id].nsp.emit('chat_response', chatRoom) : ''
+        app.io.of('chat').sockets[socket.socket_id].emit('chat_response', chatRoom) : ''
     }
   };
 };
