@@ -1,4 +1,5 @@
-module.exports = mongoose => {
+module.exports = app => {
+    const mongoose = app.mongoose;
     const Schema = mongoose.Schema;
     const ChatRoomSchema = new Schema({
         members: { type: [Schema.Types.ObjectId], required: true },

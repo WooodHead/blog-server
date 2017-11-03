@@ -1,7 +1,7 @@
 module.exports = app => {
   class Oauth extends app.Service {
     async create(target) {
-      const oauth = new this.ctx.model.oauth(Object.assign({
+      const oauth = new this.ctx.model.Oauth(Object.assign({
         created_at: this.ctx.helper.currentTime(),
       }, target))
       const result = await oauth.save();
@@ -26,7 +26,7 @@ module.exports = app => {
       return oauth.user_id;
     }
     async find(params) {
-      const oauth = await this.ctx.model.oauth.findOne(params);
+      const oauth = await this.ctx.model.Oauth.findOne(params);
       return oauth;
     }
     async check(type) {

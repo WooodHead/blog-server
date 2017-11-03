@@ -1,4 +1,5 @@
-module.exports = mongoose => {
+module.exports = app => {
+  const mongoose = app.mongoose;
 	const Schema = mongoose.Schema;
   const FollowSchema = new Schema({
     following: { type: Schema.Types.ObjectId, required: true, ref: 'User' },

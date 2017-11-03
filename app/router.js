@@ -12,6 +12,7 @@ module.exports = app => {
   app.post('/api/login', 'auth.login');
 
   app.resources('users', '/api/users', 'user');
+  app.del('/api/users', 'user.batchDestroy')
   app.patch('/api/users/:id/photo', isAuthenticated, 'user.uploadPhoto');
   app.get('/api/users/:id/followers', 'user.getFollowers');
   app.get('/api/user/followers', isAuthenticated, 'user.getFollowers');

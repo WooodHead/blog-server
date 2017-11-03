@@ -1,5 +1,6 @@
 
-module.exports = mongoose => {
+module.exports = app => {
+  const mongoose = app.mongoose;
   const RefreshTokenSchema = new mongoose.Schema({
     value: { type: String, required: true },
     token: { type: String, required: true },

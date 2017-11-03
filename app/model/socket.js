@@ -1,5 +1,6 @@
 
-module.exports = mongoose => {
+module.exports = app => {
+  const mongoose = app.mongoose;
   const SocketSchema = new mongoose.Schema({
     user_id: { type: mongoose.Schema.Types.ObjectId,  unique: true, required: true },
     socket_id: { type: String, required: true },

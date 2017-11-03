@@ -1,4 +1,5 @@
-module.exports = mongoose => {
+module.exports = app => {
+  const mongoose = app.mongoose;
 	const Schema = mongoose.Schema;
   const ArticleSchema = new Schema({
     title: { type: String, required: true },

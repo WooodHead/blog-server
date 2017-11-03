@@ -102,13 +102,7 @@ module.exports = app => {
 			const stream = await ctx.getFileStream();
 			const filename = ctx.helper.changeFilename(stream.filename);
 			const name = path.resolve(`app/public/movies/${filename}`);
-			try {
-				const writerStream = fs.createWriteStream(name);
-				stream.pipe(writerStream);
-			} catch (err) {
-				await sendToWormhole(stream);
-				throw err;
-			}
+			await ctx.fileUpload(stream, name)
 			ctx.body = {
 				url: `/public/movies/${filename}`,
 			};

@@ -1,4 +1,5 @@
-module.exports = mongoose => {
+module.exports = app => {
+  const mongoose = app.mongoose;
   const Schema = mongoose.Schema;
   const OauthSchema = new Schema({
     user_id: { type: Schema.Types.ObjectId, unique: true, required: true },

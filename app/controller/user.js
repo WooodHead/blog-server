@@ -9,8 +9,8 @@ const createRule = {
 	email: { type: 'string', required: false },
 	name: 'string',
 	birthday: { type: 'string', required: false },
-	title: { type: 'string', required: false },
-	photo: { type: 'string', required: false },
+	tel: { type: 'string', required: false },
+	avatar: { type: 'string', required: false },
 	is_admin: { type: 'boolean', required: false },
 }
 
@@ -51,15 +51,15 @@ module.exports = app => {
 			let rule = createRule;
 			if (ctx.request.body.password) {
 				rule = Object.assign(createRule, {
-					password: { type: 'string' },
+					password: { type: 'string', required: false },
 				})
 			}
 			ctx.validate(rule);
-			let user = ctx.request.body;
+			const user = ctx.request.body;
 			user._id = ctx.params.id;
-			const id = await service.user.update(ctx.request.body);
+			const _id = await service.user.update(user);
 			ctx.body = {
-				id
+				_id
 			};
 			ctx.status = 200;
 		}
@@ -67,13 +67,24 @@ module.exports = app => {
 			const { ctx, service } = this;
 			const { id } = ctx.params;
 			await service.user.remove(id);
+			ctx.body = {
+				_id: id
+			};
+			ctx.status = 200;
+		}
+		async batchDestroy() {
+			const { ctx, service } = this;
+			const ids = ctx.request.body;
+			await service.user.remove(ids);
+			ctx.body = {
+				_ids: ids
+			};
 			ctx.status = 200;
 		}
 		async uploadPhoto() {
 			const { ctx, service } = this;
 			const stream = await ctx.getFileStream();
 			const filename = ctx.helper.changeFilename(stream.filename);
-			console.log(filename, 123)
 			await ctx.fileUpload(stream, path.resolve(`app/public/images/photos/${filename}`))
 			const photo = `/public/images/photos/${filename}`;
 			const id = await service.user.updatePhoto(ctx.params.id, photo)

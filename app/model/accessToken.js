@@ -1,6 +1,7 @@
 const token_expires_in = 60 * 60 // 1h;
 
-module.exports = mongoose => {
+module.exports = app => {
+  const mongoose = app.mongoose;
   const accessTokenSchema = new mongoose.Schema({
     value: { type: String, unique: true, required: true },
     user_id: { type: String, required: false },

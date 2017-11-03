@@ -50,7 +50,7 @@ module.exports = {
     }
     //查询记录数
     const getCount = queryParams => {
-      sqlHandler = new SqlHandler(sql);
+      const sqlHandler = new SqlHandler(sql);
       const newSql = sqlHandler
         .setCount()
         .setQueryParams(queryParams)
@@ -60,7 +60,7 @@ module.exports = {
 
     //查询分页记录
     const getSelect = ({ queryParams, sorter, pageSize, start }) => {
-      sqlHandler = new SqlHandler(sql);
+      const sqlHandler = new SqlHandler(sql);
       const newSql = sqlHandler
         .setQueryParams(queryParams)
         .setSortParams(sorter)
@@ -68,7 +68,13 @@ module.exports = {
         .getSql()
       return db.query(newSql, params);
     }
-    return await _pagination(query, getCount, getSelect);
+    const sqlHandler = new SqlHandler(sql);
+    const aliases = sqlHandler.getAliases();
+    const newQuery = {};
+    for (let key in query) {
+      newQuery[aliases[key] ? aliases[key] : key] = query[key];
+    }
+    return await _pagination(newQuery, getCount, getSelect);
   },
 }
 
@@ -114,7 +120,7 @@ const _pagination = async (query, getCount, getSelect) => {
       start
     })
   ])
-  result.pagination.total = Array.isArray(count) ? 
+  result.pagination.total = Array.isArray(count) ?
     count.reduce((pre, cur) => ({ count: pre.count + cur.count }), { count: 0 }).count
     : count
   result.records = records;

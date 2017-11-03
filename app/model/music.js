@@ -1,4 +1,5 @@
-module.exports = mongoose => {
+module.exports = app => {
+  const mongoose = app.mongoose;
 	const Schema = mongoose.Schema;
   const MusicSchema = new Schema({
     name: { type: String, required: true },

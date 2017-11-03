@@ -1,12 +1,28 @@
 module.exports = class SqlHandler {
 	constructor(sql) {
-		this.sql = sql;
+		this.sql = sql.toLowerCase();
 	}
 
 	setCount() {
 		const sql = this.sql;
-		this.sql = `select count(1) count ${sql.substring(sql.indexOf('from'))} `;
+		this.sql = `select count(1) count ${sql.substring(sql.indexOf(' from '))} `;
 		return this;
+	}
+
+	getAliases() {
+		const sql = this.sql;
+		const aliasSql = sql.substring(sql.indexOf('select ') + 7, sql.indexOf(' from '));
+		const aliasMaps = aliasSql.split(',');
+		const map = {};
+		aliasMaps.forEach(item => {
+			const mapStr = item.trim().split(' ');
+			if (mapStr.length > 1) {
+				const value = mapStr[0].trim();
+				const key = mapStr[1].trim();
+				map[key] = value;
+			}
+		})
+		return map;
 	}
 
 	setQueryParams(queryParams) {
@@ -21,7 +37,9 @@ module.exports = class SqlHandler {
 			preSql += ' where 1 = 1 ';
 		}
 		for (let key in queryParams) {
-			preSql += `and ${key} = ${queryParams[key]} `;
+			let value = queryParams[key];
+			value = 'string' === typeof value ? `'${value}'` : value;
+			preSql += `and ${key} = ${value} `;
 		}
 		this.sql = `${preSql} ${extSql} `;
 		return this;
