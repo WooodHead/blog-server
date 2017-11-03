@@ -5,29 +5,29 @@
   "private": true,
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
-    "egg": "^1.0.0",
-    "egg-cors": "^1.1.0",
-    "egg-mongoose": "^1.1.1",
+    "egg": "^1.9.0",
+    "egg-cors": "^1.2.0",
+    "egg-mongoose": "^2.1.1",
     "egg-passport": "^1.0.0",
-    "egg-socket.io": "^1.2.2",
+    "egg-socket.io": "^2.1.0",
     "egg-validate": "^1.0.0",
     "moment": "^2.18.1",
     "node-uuid": "^1.4.8",
     "stream-wormhole": "^1.0.3"
   },
   "devDependencies": {
-    "autod": "^2.7.1",
-    "egg-bin": "^3.1.0",
-    "egg-ci": "^1.5.0",
-    "egg-mock": "^3.2.0",
-    "eslint": "^3.18.0",
-    "eslint-config-egg": "^3.2.0",
-    "supertest": "^3.0.0",
-    "webstorm-disable-index": "^1.1.2",
+    "autod": "^2.9.0",
+    "egg-bin": "^4.2.0",
+    "egg-ci": "^1.8.0",
+    "egg-mock": "^3.10.0",
+    "eslint": "^4.5.0",
+    "eslint-config-egg": "^5.1.0",
     "jsonwebtoken": "^7.3.0",
     "log4js": "^0.6.38",
     "mongoose": "^4.6.4",
-    "oauth2orize": "^1.5.1"
+    "oauth2orize": "^1.5.1",
+    "supertest": "^3.0.0",
+    "webstorm-disable-index": "^1.2.0"
   },
   "engines": {
     "node": ">=6.0.0"
