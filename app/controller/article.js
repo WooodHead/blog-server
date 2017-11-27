@@ -15,7 +15,7 @@ module.exports = app => {
 			const result = await service.article.search(ctx.query);
 			ctx.body = {
 				pagination: result.pagination,
-				articles: result.records
+				articles: result.records,
 			};
 			ctx.status = 201;
 		}
