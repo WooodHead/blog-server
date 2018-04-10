@@ -1,8 +1,53 @@
-const Controller = require('egg').Controller;
+const config = require('./config');
+const fetch = require('../fetch');
+// client_id, client_serct, redirect_uri, scope, state, github_api_root_path, github_oauth_url, github_oauth_token
 
-const type = 'github';
+class Github {
 
-class GithubController extends Controller {
+    constructor({ redirect_uri, client_id, client_secret }) {
+        this.redirect_uri = redirect_uri;
+        this.client_id = client_id;
+        this.client_secret = client_secret;
+    }
+
+    async callback(renderCallbackUrl) {
+        const accessToken = await getAccessToken();
+        const user = await getUser(accessToken);
+        const callbackUrl = renderCallbackUrl(accessToken, user);
+        ctx.redirect(callbackUrl);
+    }
+
+    async getAccessToken(code, options) {
+        const { github_oauth_token, state } = config;
+        const { client_id, client_secret, redirect_uri } = this;
+        const resp = await fetch.post(`${github_oauth_token}`, {
+            data: {
+                client_id,
+                client_secret,
+                code,
+                redirect_uri,
+                state,
+            }
+        })
+        return resp.data.access_token;
+    }
+
+    async getUser(accessToken) {
+        const { github_api_root_path } = config;
+        const resp = await fetch.get(`${github_api_root_path}/user`, {
+            dataType: 'json',
+            headers: {
+                authorization: `token ${access_token}`,
+                scope: 'user',
+                'Content-Type': 'application/json',
+            }
+        })
+    }
+
+
+
+
+
     async index() {
         const { ctx, service, config } = this;
         const { client_id, client_serct, redirect_uri, scope, state, github_api_root_path, github_oauth_url, github_oauth_token } = config.githubOauth;

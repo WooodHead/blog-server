@@ -4,11 +4,11 @@ module.exports = app => {
     username: { type: String, unique: true, required: true },
     password: { type: String, required: true },
     name: { type: String, required: true },
-    sex: { type: Number, required: true },
+    sex: { type: Number, required: false },
     email: { type: String, required: false },
     tel: { type: String, required: false },
     birthday: { type: String, required: false },
-    avatar: { type: String, required: false },
+    photo: { type: String, required: false },
     created_at: { type: String, required: true },
     updated_at: { type: String, required: true },
   });

@@ -1,14 +1,14 @@
 'use strict';
 
 
-const ip = 'www.qingye.red';
+// const ip = 'www.qingye.red';
 // const ip = '119.23.242.131';
-const client_port = '80';
-const root_path = `http://${ip}:7001`;
-
-// const ip = 'localhost';
-// const client_port = '8000';
+// const client_port = '80';
 // const root_path = `http://${ip}:7001`;
+
+const ip = 'localhost';
+const client_port = '8000';
+const root_path = `http://${ip}:7001`;
 
 module.exports = appInfo => {
   const config = {

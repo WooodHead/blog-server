@@ -18,7 +18,7 @@ const firstToUpperCase = str => {
 pluralTemplateName = pluralTemplateName || `${templateName}s`;
 const firseUpperTemplateName = firstToUpperCase(templateName); // 首字母大写的资源名称
 
-// 将文件模板信息读取带内存中
+// 将文件模板信息读取到内存中
 const loopRead = (templateBasePath, currentBasename) => {
     let result = undefined;
     const templatePath = `${templateBasePath}/${currentBasename}`;
@@ -76,5 +76,3 @@ const targetData = replaceTemplate(result[currentBasename]);
 Object
     .keys(targetData)
     .map(key => loopWrite(outputPath, key, targetData[key]))
-
-
