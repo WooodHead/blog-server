@@ -10,6 +10,7 @@ module.exports = app => {
 		like: { type: Number, required: false },
 		reading: { type: Number, required: false },
     cover: { type: String, required: false },
+    commentCount: { type: Number, required: false },
   });
 
   return mongoose.model('Article', ArticleSchema);

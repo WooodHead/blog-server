@@ -23,6 +23,9 @@ class ArticleController extends Controller {
 		const { ctx, service } = this;
 		const { id } = ctx.params;
 		const article = await service.article.find(id);
+		await this.ctx.model.Article.update({ _id: id }, {
+			$inc: { reading: 1 }
+		});
 		ctx.body = {
 			article
 		};
@@ -31,6 +34,7 @@ class ArticleController extends Controller {
 	async create() {
 		const { ctx, service } = this;
 		let article;
+		let tags;
 		if (ctx.request.header['content-type'].indexOf('multipart/') !== -1) {
 			const stream = await ctx.getFileStream();
 			ctx.validate(createRule, Object.assign(stream.fields, {
@@ -40,13 +44,25 @@ class ArticleController extends Controller {
 			if (stream.fields.tags.length === 1 && !stream.fields.tags[0]) {
 				delete stream.fields.tags;
 			}
+			tags = stream.fields.tags;
 			await ctx.fileUpload(stream, path.resolve(`app/public/images/pictures/${filename}`))
 			article = await service.article.create(Object.assign(stream.fields, {
 				cover: `/public/images/pictures/${filename}`
 			}));
 		} else {
 			ctx.validate(createRule);
+			tags = ctx.request.body.tags;
 			article = await service.article.create(ctx.request.body);
+		}
+		for (let tag of tags) {
+			await ctx.model.Tag.update({ name: tag }, {
+				$setOnInsert: {
+					created_at: this.ctx.helper.currentTime(),
+				}
+			}, {
+					upsert: true,
+					multi: true,
+				})
 		}
 		ctx.body = {
 			article
@@ -55,7 +71,7 @@ class ArticleController extends Controller {
 	}
 	async update() {
 		const { ctx, service } = this;
-		let article;
+		let article, tags;
 		if (ctx.request.header['content-type'].indexOf('multipart/') !== -1) {
 			const stream = await ctx.getFileStream();
 			ctx.validate(createRule, Object.assign(stream.fields, {
@@ -66,14 +82,26 @@ class ArticleController extends Controller {
 			if (stream.fields.tags.length === 1 && !stream.fields.tags[0]) {
 				delete stream.fields.tags;
 			}
+			tags = stream.fields.tags;
 			article = await service.article.update(Object.assign(stream.fields, {
 				cover: `/public/images/pictures/${filename}`
 			}));
 		} else {
 			ctx.validate(createRule);
 			let article = ctx.request.body;
+			tags = article.tags;
 			article._id = ctx.params.id;
 			article = await service.article.update(ctx.request.body);
+		}
+		for (let tag of tags) {
+			await ctx.model.Tag.update({ name: tag }, {
+				$setOnInsert: {
+					created_at: this.ctx.helper.currentTime(),
+				}
+			}, {
+					upsert: true,
+					multi: true,
+				})
 		}
 		ctx.body = {
 			article
@@ -112,6 +140,9 @@ class ArticleController extends Controller {
 		const comment = await service.comment.create(Object.assign(ctx.request.body, {
 			article: id
 		}));
+		await this.ctx.model.Article.update({ _id: id }, {
+			$inc: { commentCount: 1 }
+		});
 		ctx.body = {
 			comment
 		}

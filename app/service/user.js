@@ -57,6 +57,10 @@ class UserService extends Service {
         })
         return user;
     }
+    async getUnfollowing(id) {
+        const [users, follow] = await Promise.all([this.ctx.model.User.find({}), this.ctx.model.Follow.find({})]);
+        return users.filter(({ _id }) => _id.toString() !== id && !follow.some(({ following }) => _id.toString() === following.toString()));
+    }
 }
 
 module.exports = UserService;

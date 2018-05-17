@@ -123,6 +123,15 @@ class UserController extends Controller {
         await service.follow.create(target);
         ctx.status = 204;
     }
+    async unfollowing() {
+        const { ctx, service } = this;
+        const { id } = ctx.params;
+        const users = await service.user.getUnfollowing(id);
+        ctx.body = {
+            users,
+        };
+        ctx.status = 200;
+    }
 }
 
 module.exports = UserController;

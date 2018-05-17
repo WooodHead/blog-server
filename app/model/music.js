@@ -12,6 +12,7 @@ module.exports = app => {
     lyric: { type: String, required: false },
     style: { type: String, required: true },
     src: { type: String, required: true },
+    tags: { type: [String], required: false },
     publisher: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
   });
 

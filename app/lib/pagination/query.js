@@ -9,12 +9,21 @@ module.exports = {
    */
   async mongodb(query, Model, populate = '') {
     const getCount = queryParams => Model.count(queryParams)
-    const getSelect = ({ queryParams, sorter, pageSize, start }) => Model
-      .find(queryParams)
-      .skip(start)
-      .limit(pageSize)
-      .populate(populate)
-      .sort(sorter)
+    const getSelect = ({ queryParams, sorter, pageSize, start }) => {
+      const query = Object.keys(queryParams).reduce((target, key) => {
+        return {
+          ...target,
+          [key]: Model.schema.obj[key].type === Number ||
+          Model.schema.obj[key].type.name === 'ObjectId' ? queryParams[key] : new RegExp(queryParams[key].toString(), 'i')
+        };
+      }, {});
+      return Model
+        .find(query)
+        .skip(start)
+        .limit(pageSize)
+        .populate(populate)
+        .sort(sorter)
+    }
 
     return await _pagination(query, getCount, getSelect);
   },

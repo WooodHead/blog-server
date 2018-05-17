@@ -12,7 +12,8 @@ module.exports = app => {
   app.post('/api/login', 'auth.login');
 
   app.resources('users', '/api/users', 'user');
-  app.del('/api/users', 'user.batchDestroy')
+  app.del('/api/users', 'user.batchDestroy');
+  app.get('/api/users/:id/unfollowing', 'user.unfollowing');
   app.patch('/api/users/:id/photo', isAuthenticated, 'user.uploadPhoto');
   app.get('/api/users/:id/followers', 'user.getFollowers');
   app.get('/api/user/followers', isAuthenticated, 'user.getFollowers');
@@ -32,10 +33,11 @@ module.exports = app => {
   app.resources('music', '/api/music', 'music');
   app.post('/api/music/upload', 'music.upload');
 
-  app.post('message', '/api/messages', isAuthenticated, 'message.create')
+  app.post('message', '/api/messages', isAuthenticated, 'message.create');
   app.resources('messages', '/api/messages', 'message');
 
   app.resources('chat_rooms', '/api/chat_rooms', 'chatRoom');
+  app.resources('tags', '/api/tags', 'tag');
 
   // or app.io.of('/')
 

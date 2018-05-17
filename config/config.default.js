@@ -49,7 +49,7 @@ module.exports = appInfo => {
 
     security: {
       csrf: false,
-      domainWhiteList: ['localhost', 'http://localhost:8000', 'github.com', 'http://119.23.242.131:5000', '119.23.242.131', 'http://www.qingye.red', 'www.qingye.red'],
+      domainWhiteList: ['localhost', 'http://localhost:8000', 'http://localhost:8001', 'github.com', 'http://119.23.242.131:5000', '119.23.242.131', 'http://www.qingye.red', 'www.qingye.red'],
     },
 
     githubOauth: {
